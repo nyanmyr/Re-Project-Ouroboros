@@ -1,5 +1,8 @@
 package reprojectouroboros;
 
+import java.awt.Dimension;
+import java.awt.event.*;
+
 public class Menu extends javax.swing.JFrame {
 
     public Menu() {
@@ -21,24 +24,11 @@ public class Menu extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(1024, 768));
         setSize(new java.awt.Dimension(1024, 768));
 
-        button_QuickStart.setText("jButton1");
+        panel_Menu.setLayout(null);
 
-        javax.swing.GroupLayout panel_MenuLayout = new javax.swing.GroupLayout(panel_Menu);
-        panel_Menu.setLayout(panel_MenuLayout);
-        panel_MenuLayout.setHorizontalGroup(
-            panel_MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_MenuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(button_QuickStart)
-                .addContainerGap(750, Short.MAX_VALUE))
-        );
-        panel_MenuLayout.setVerticalGroup(
-            panel_MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_MenuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(button_QuickStart)
-                .addContainerGap(510, Short.MAX_VALUE))
-        );
+        button_QuickStart.setText("jButton1");
+        panel_Menu.add(button_QuickStart);
+        button_QuickStart.setBounds(6, 6, 75, 23);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -51,6 +41,12 @@ public class Menu extends javax.swing.JFrame {
             .addComponent(panel_Menu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        panel_Menu.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent evt) {
+                panel_ScreenResized(evt);
+            }
+        });
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -60,6 +56,50 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel panel_Menu;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
+    
+    private void panel_ScreenResized(ComponentEvent evt) {
+        
+        
+        Dimension screenSize = panel_Menu.getSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        
+        // use this for helper method
+        // minimum size x: 1900 y:877
+//        System.out.printf("x:%s y:%s\n", screenWidth, screenHeight);
+        System.out.println("TEST: " + (int) (1900 * 0.16));
+        
+        // make a helper method out of this (25/7/2025 10:28PM)
+        var menu_buttonDimensions = new Dimension(
+                determineWidth(0.16f, screenWidth),
+                determineHeight(0.075f, screenHeight)
+        );
+        
+        button_QuickStart.setBounds(
+                ((int) (screenWidth * 0.5)) - ((int) (menu_buttonDimensions.width * 0.5)),
+                ((int) (screenHeight * 0.5)) - ((int) (menu_buttonDimensions.height * 0.5)),
+                menu_buttonDimensions.width, menu_buttonDimensions.height
+        );
+        
+        // size debugging
+        button_QuickStart.setText(String.format("x:%s y:%s", button_QuickStart.getSize().width, button_QuickStart.getSize().height));
+    }
+    
+    private int determineWidth(float sizeAmount, int screenDimension) {
+        
+        return (int) (screenDimension * sizeAmount) < 0 
+                ? (int) (1900 * sizeAmount)
+                : (int) (screenDimension * sizeAmount
+                );
+    }
+    
+    private int determineHeight(float sizeAmount, int screenDimension) {
+        
+        return (int) (screenDimension * sizeAmount) < 0 
+                ? (int) (900 * sizeAmount)
+                : (int) (screenDimension * sizeAmount
+                );
+    }
     
     public static void main(String args[]) {
 
